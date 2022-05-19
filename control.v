@@ -121,41 +121,40 @@ reg [3:0] state, next_state;
         S_keep:
         begin
             keep = 0;
-            if (time_cnt == time_f)   // 0.5?
+            if (time_cnt == time_f)   
             begin
                 next_state = S_down;
-                //next_state = S_renew1 ;
+        
             end
             else if (down == 1)
             begin
                next_state = S_down;
-               // next_state = S_renew1 ;
+
             end
             else if ((left == 1)|| (right == 1)||(rotate == 1))
             begin
                 next_state = S_move;
-                //next_state = S_renew1 ;
+
             end
             else
                 next_state = S_keep;
         end
-        S_move:     //??????????
+        S_move:    
         begin
             move = 1;
-            //opcode = {rotate, down, left, right};
             if (move_comp)
                 next_state = S_renew1 ;
             else
                 next_state = S_keep;
         end
-        S_renew1 :    //???????ид?????
+        S_renew1 :   
         begin
-            //opcode = {rotate, down, left, right};
+   
             renew1  = 1;
-            //if (renew1 _finish)
+   
             next_state = S_keep;
-            //else 
-            //    next_state = S_renew1 ;
+   
+  
         end
         S_down:
         begin
@@ -164,7 +163,7 @@ reg [3:0] state, next_state;
                 next_state = S_renew1 ;
             else
                 next_state = S_renew2;
-                //next_state = S_keep;
+            
                 
         end
         S_renew2:
