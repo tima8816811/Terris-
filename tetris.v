@@ -22,13 +22,14 @@
 
 module tetris (
     output reg move_able,shift_finish,down_able,die_true,remove_f,
-    output     [239:0] M_OUT,
-    output reg [4:0] n,
-    output reg [3:0] m,
-    output reg [6:0] block,
     input clk,clr,move,down,die,renew1,renew2,remove,random,stop,auto_down,
     input [3:0] code
     );
+
+wire     [239:0] M_OUT;
+reg       [4:0] n;
+reg       [3:0] m;
+reg       [6:0] block;
     
 parameter       A_1 = 7'b0001000;
 parameter       B_1 = 7'b0011000;
