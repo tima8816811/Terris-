@@ -489,7 +489,7 @@ end
     always @(*)
     begin
        if (die) begin
-            if (|R[]) die_true = 1;
+            if (|R[0]) die_true = 1;
             else die_true = 0;
        end
        else die_true=0;
