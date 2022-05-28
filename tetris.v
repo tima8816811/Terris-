@@ -27,7 +27,6 @@ module tetris (
     );
 
     
-wire     [239:0] M_OUT;
 reg       [4:0] n;
 reg       [3:0] m;
 reg       [6:0] block;
@@ -62,7 +61,6 @@ parameter       G_2 = 7'b1100100;
     reg [4:0] remove_c;
     reg       carry;
 
-assign M_OUT = {R[23],R[22],R[21],R[20],R[19],R[18],R[17],R[16],R[15],R[14],R[13],R[12],R[11],R[10],R[9],R[8],R[7],R[6],R[5],R[4],R[3],R[2],R[1],R[0]};
 
     always @ (posedge clk or posedge clr)
     begin
