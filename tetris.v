@@ -25,12 +25,11 @@ module tetris (
     input clk,clr,move,down,die,renew1,renew2,remove,random,stop,auto_down,
     input [3:0] code
     );
-
-    
+wire     [239:0] M_OUT;
 reg       [4:0] n;
 reg       [3:0] m;
 reg       [6:0] block;
-    
+
 parameter       A_1 = 7'b0001000;
 parameter       B_1 = 7'b0011000;
 parameter       B_2 = 7'b0010100;
@@ -61,6 +60,7 @@ parameter       G_2 = 7'b1100100;
     reg [4:0] remove_c;
     reg       carry;
 
+assign M_OUT = {R[23],R[22],R[21],R[20],R[19],R[18],R[17],R[16],R[15],R[14],R[13],R[12],R[11],R[10],R[9],R[8],R[7],R[6],R[5],R[4],R[3],R[2],R[1],R[0]};
 
     always @ (posedge clk or posedge clr)
     begin
@@ -210,7 +210,8 @@ parameter       G_2 = 7'b1100100;
     begin
         if (clr)
             begin
-                for (i = 0; i < 24; i = i + 1) R[i] <= 0;
+                for (i = 0; i < 24; i = i + 1) 
+                R[i] <= 0;
                 remove_f<=0;
             end
         else if (renew2)
@@ -250,7 +251,7 @@ parameter       G_2 = 7'b1100100;
           if (!remove_finish[0])
             begin if ((&R[n-1])|(carry))
                 begin
-                    if ( remove_s[0]) begin 
+                    if (remove_s[0]) begin 
                     remove_c<=n-1; 
                      remove_s[0]<=0; 
                     carry<=1;end
@@ -489,7 +490,7 @@ end
     always @(*)
     begin
        if (die) begin
-            if (|R[0]) die_true = 1;
+            if (|R[3]) die_true = 1;
             else die_true = 0;
        end
        else die_true=0;
