@@ -27,29 +27,21 @@ output reg  [3:0] code,
 output reg  gen_random,renew1,move_down,renew2,remove,stop,move,die,auto_down
 );
 //not reg not debounce
-parameter time_f = 26'd25000001;
+parameter time_f = 26'd5000;//50000001;
 reg [25:0] time_cnt;
-reg auto_down_reg;
 reg keep;
   
     
 always @ (posedge clk or posedge clr)
     begin
         if (clr)
-            auto_down_reg <= 0;
+            auto_down <= 0;
         else if (time_cnt == time_f)
-            auto_down_reg <= 1;
+            auto_down <= 1;
         else 
-            auto_down_reg <= 0;
+            auto_down <= 0;
     end
 
- always @ (posedge clk or posedge clr)
-    begin
-        if (clr)
-            auto_down <= 0;
-        else
-            auto_down <= auto_down_reg;
-    end
     
 parameter       S_blank     = 4'd0,
                 S_random    = 4'd1,
@@ -61,6 +53,7 @@ parameter       S_blank     = 4'd0,
                 S_remove  = 4'd7,
                 S_new     = 4'd8,
                 S_stop      = 4'd9;
+                
 reg [3:0] state, next_state;
 
  always @(posedge clk or posedge clr)
@@ -75,7 +68,7 @@ reg [3:0] state, next_state;
     begin
         if (clr)
             time_cnt <= 0;
-        else if (keep == 0 && time_cnt < time_f)
+        else if (keep == 1 && time_cnt < time_f)
             time_cnt <= time_cnt + 1;
         else if (move_down == 1)
             time_cnt <= 0;
@@ -95,7 +88,7 @@ reg [3:0] state, next_state;
  always @ (*)
     begin
         next_state = S_blank;
-        keep = 1;
+        keep = 0;
         gen_random = 0;
         //code = 4'b0000;
         renew1 = 0;
@@ -120,36 +113,42 @@ reg [3:0] state, next_state;
         end
         S_keep:
         begin
-            keep = 0;
-            if (time_cnt == time_f)  
+            keep = 1;
+            if (time_cnt == time_f)   // 0.5?
             begin
                 next_state = S_down;
-         
+                //next_state = S_renew1 ;
             end
             else if (down == 1)
             begin
                next_state = S_down;
-  
+               // next_state = S_renew1 ;
             end
             else if ((left == 1)|| (right == 1)||(rotate == 1))
             begin
                 next_state = S_move;
+                //next_state = S_renew1 ;
             end
             else
                 next_state = S_keep;
         end
-        S_move:    
+        S_move:     //??????????
         begin
             move = 1;
+            //code = {rotate, down, left, right};
             if (move_able)
                 next_state = S_renew1 ;
             else
                 next_state = S_keep;
         end
-        S_renew1 : 
+        S_renew1 :    //???????角?????
         begin
+            //code = {rotate, down, left, right};
             renew1  = 1;
+            //if (renew1 _finish)
             next_state = S_keep;
+            //else 
+            //    next_state = S_renew1 ;
         end
         S_down:
         begin
@@ -157,7 +156,9 @@ reg [3:0] state, next_state;
             if (down_able)
                 next_state = S_renew1 ;
             else
-                next_state = S_renew2;                
+                next_state = S_renew2;
+                //next_state = S_keep;
+                
         end
         S_renew2:
         begin
